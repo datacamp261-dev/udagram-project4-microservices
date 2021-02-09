@@ -1,11 +1,11 @@
 # Set the base image
-FROM node:10
+FROM node:12
 # Create app directory
 WORKDIR /usr/src/app
 # Copy package.json AND package-lock.json
 COPY package*.json ./
 # Install all dependencies
-RUN npm install
+RUN npm install .
 # Copy the rest of the code
 COPY . .
 # Expose the port 
