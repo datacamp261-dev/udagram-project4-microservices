@@ -1,0 +1,18 @@
+version: "3"
+services:
+  reverseproxy:
+    build:
+      context: .
+    image: datacamp265/reverseproxy
+  backend_user:
+    build:
+      context: .
+    image: datacamp265/udacity-restapi-user
+  backend_feed:
+    build:
+      context: .
+    image: datacamp265/udacity-restapi-feed
+  frontend:
+    build:
+      context: .
+    image: datacamp265/udacity-frontend

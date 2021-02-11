@@ -1,21 +1,15 @@
 version: "3"
-networks:
-  udagram:
-    driver: bridge
 services:
   reverseproxy:
     image: datacamp265/reverseproxy
-    build:
-      context: .
     ports:
       - 8080:8080
     restart: always
-    networks:
-      - udagram
+    depends_on:
+      - backend-user
+      - backend-feed
   backend-user:
     image: datacamp265/udacity-restapi-user
-    build:
-      context: .
     volumes:
       - $HOME/.aws:/root/.aws
     environment:
@@ -28,31 +22,21 @@ services:
       AWS_MEDIA_BUCKET: $AWS_MEDIA_BUCKET
       JWT_SECRET: $JWT_SECRET
       URL: "http://localhost:8100"
-    networks:
-      - udagram
   backend-feed:
     image: datacamp265/udacity-restapi-feed
-    build:
-      context: .
     volumes:
       - $HOME/.aws:/root/.aws
     environment:
       POSTGRES_USERNAME: $POSTGRES_USERNAME
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
-      POSTGRES_DB: $POSTGRES_DATABASE
+      POSTGRES_DATABASE: $POSTGRES_DATABASE
       POSTGRES_HOST: $POSTGRES_HOST
       AWS_REGION: $AWS_REGION
       AWS_PROFILE: $AWS_PROFILE
-      AWS_BUCKET: $AWS_MEDIA_BUCKET
+      AWS_MEDIA_BUCKET: $AWS_MEDIA_BUCKET
       JWT_SECRET: $JWT_SECRET
       URL: "http://localhost:8100"
-    networks:
-      - udagram
   frontend:
     image: datacamp265/udacity-frontend
-    build:
-      context: .
     ports:
-      - "8100:80"
-    networks:
-      - udagram
+      - 8100:80
