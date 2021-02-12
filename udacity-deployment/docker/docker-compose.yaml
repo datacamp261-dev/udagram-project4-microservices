@@ -10,12 +10,15 @@ services:
     ports:
       - 8080:8080
     restart: always
+    depends_on:
+      - backend-feed
+      - backend-user
     networks:
       - udagram
   backend-user:
     image: datacamp265/udacity-restapi-user
     build:
-      context: .
+      context: ../../udacity-restapi-user/
     volumes:
       - $HOME/.aws:/root/.aws
     environment:
@@ -33,7 +36,7 @@ services:
   backend-feed:
     image: datacamp265/udacity-restapi-feed
     build:
-      context: .
+      context: ../../udacity-restapi-feed/
     volumes:
       - $HOME/.aws:/root/.aws
     environment:
@@ -51,7 +54,7 @@ services:
   frontend:
     image: datacamp265/udacity-frontend
     build:
-      context: .
+      context: ../../udacity-frontend/
     ports:
       - "8100:80"
     networks:

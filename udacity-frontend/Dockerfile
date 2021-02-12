@@ -11,5 +11,7 @@ RUN npm ci
 COPY . .
 RUN ionic build
 
-# Define the command that should be executed
-CMD [ "ionic", "serve"]
+## Run 
+FROM nginx:alpine
+#COPY www /usr/share/nginx/html
+COPY --from=ionic /usr/src/app/www /usr/share/nginx/html
