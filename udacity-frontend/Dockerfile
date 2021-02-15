@@ -1,22 +1,15 @@
-
-# Use NodeJS base image
-FROM node:13
-
-# Create app directory
-WORKDIR /usr/src/app
-
-# Install app dependencies by copying
-# package.json and package-lock.json
-COPY package*.json ./
-
-# Install dependencies
+  
+## Build
+FROM node:13 as build
+WORKDIR /app
+COPY package*.json /app/
+RUN npm ci
+COPY ./ /app/ 
 RUN npm install -g @ionic/cli
-RUN npm install
+RUN ionic build
 
-# Copy app source
-COPY . .
-
-EXPOSE 8100
-
-# Serve
-CMD ["/usr/local/bin/ionic", "serve", "-p", "8100", "--external"]
+## Run 
+FROM nginx:alpine
+RUN rm -rf /usr/share/nginx/html/*
+#COPY www /usr/share/nginx/html
+COPY --from=build  /app/www /usr/share/nginx/html
