@@ -1,23 +1,40 @@
-language: minimal
+language: node_js
+node_js:
+  - 13
 
-services: docker
+services:
+  - docker
 
-env:
-  - DOCKER_COMPOSE_VERSION=1.25.5
-
-before_install:
-  - docker -v && docker-compose -v
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-  - chmod +x ./kubectl
-  - sudo mv ./kubectl /usr/local/bin/kubectl
-
+# Pre-testing installs
 install:
-  - docker-compose -f udacity-deployment/docker/docker-compose.yaml build --parallel
+  - echo "nothing needs to be installed"
+
+# Scripts to be run such as tests
+before_script:
+  - echo "no tests"
+
+script:
+  - docker --version # print the version for logging
   
- after_success:
+  # Service feed
+  - docker build -t udacity-restapi-feed ./udagram-feed/
+  - docker tag udacity-restapi-feed "$DOCKER_USERNAME"/udacity-restapi-feed:latest
+  
+  # Service users
+  - docker build -t udacity-restapi-user ./udagram-users/
+  - docker tag udacity-restapi-user "$DOCKER_USERNAME"/udacity-restapi-user:latest
+  
+  # Service frontend
+  - docker build -t udacity-frontend ./udagram-frontend/
+  - docker tag udacity-frontend "$DOCKER_USERNAME"/udacity-frontend:latest
+  
+  # Service reverseproxy
+  - docker build -t reverseproxy ./udagram-reverseproxy/
+  - docker tag reverseproxy "$DOCKER_USERNAME"/reverseproxy:latest
+
+after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker-compose -f udacity-deployment/docker/docker-compose.yaml push
+  - docker push "$DOCKER_USERNAME"/udacity-restapi-feed:latest
+  - docker push "$DOCKER_USERNAME"/udacity-restapi-user:latest
+  - docker push "$DOCKER_USERNAME"/udacity-frontend:latest
+  - docker push "$DOCKER_USERNAME"/reverseproxy:latest
