@@ -17,19 +17,19 @@ script:
   - docker --version # print the version for logging
   
   # Service feed
-  - docker build -t udacity-restapi-feed ./udagram-feed/
+  - docker build -t udacity-restapi-feed ./udacity-restapi-feed
   - docker tag udacity-restapi-feed "$DOCKER_USERNAME"/udacity-restapi-feed:latest
   
   # Service users
-  - docker build -t udacity-restapi-user ./udagram-users/
+  - docker build -t udacity-restapi-user ./udacity-restapi-user
   - docker tag udacity-restapi-user "$DOCKER_USERNAME"/udacity-restapi-user:latest
   
   # Service frontend
-  - docker build -t udacity-frontend ./udagram-frontend/
+  - docker build -t udacity-frontend ./udacity-frontend
   - docker tag udacity-frontend "$DOCKER_USERNAME"/udacity-frontend:latest
   
   # Service reverseproxy
-  - docker build -t reverseproxy ./udagram-reverseproxy/
+  - docker build -t reverseproxy .
   - docker tag reverseproxy "$DOCKER_USERNAME"/reverseproxy:latest
 
 after_success:
