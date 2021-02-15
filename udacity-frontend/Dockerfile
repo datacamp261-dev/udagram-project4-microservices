@@ -1,17 +1,22 @@
-## Build
-FROM beevelop/ionic AS ionic
+
+# Use NodeJS base image
+FROM node:13
+
 # Create app directory
 WORKDIR /usr/src/app
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
-RUN npm ci
-# Bundle app source
-COPY . .
-RUN ionic build
 
-## Run 
-FROM nginx:alpine
-#COPY www /usr/share/nginx/html
-COPY --from=ionic /usr/src/app/www /usr/share/nginx/html
+# Install app dependencies by copying
+# package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install -g @ionic/cli
+RUN npm install
+
+# Copy app source
+COPY . .
+
+EXPOSE 8100
+
+# Serve
+CMD ["/usr/local/bin/ionic", "serve", "-p", "8100", "--external"]
