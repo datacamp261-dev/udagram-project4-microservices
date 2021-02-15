@@ -1,0 +1,71 @@
+piVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: backend-user
+  name: backend-user
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: backend-user
+  template:
+    metadata:
+      labels:
+        service: backend-user
+    spec:
+      containers:
+      - image: datacamp265/udacity-restapi-user
+        name: backend-user
+        imagePullPolicy: Always          
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"       
+        ports:
+        - containerPort: 8080
+        env:
+        - name: URL
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
+              key: URL
+        - name: AWS_MEDIA_BUCKET
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
+              key: AWS_MEDIA_BUCKET
+        - name: AWS_REGION
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
+              key: AWS_REGION
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
+              key: JWT_SECRET
+        - name: POSTGRES_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
+              key: POSTGRES_DATABASE
+        - name: POSTGRES_HOST
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
+              key: POSTGRES_HOST
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
+              key: POSTGRES_PASSWORD
+        - name: POSTGRES_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: env-secret
+              key: POSTGRES_USERNAME      
+      restartPolicy: Always
