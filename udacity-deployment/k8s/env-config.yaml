@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+data:
+  AWS_MEDIA_BUCKET: udagram-ph-dev
+  AWS_PROFILE: 001521917770_admin_eu-central-1
+  AWS_REGION: eu-central-1
+  JWT_SECRET: hammond3
+  POSTGRES_DATABASE: postgres
+  POSTGRES_HOST: udacityudagramphdev2.clyvb8goopmh.eu-central-1.rds.amazonaws.com
+  URL: http://localhost:8100
+metadata:
+  name: env-config
