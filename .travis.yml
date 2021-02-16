@@ -29,7 +29,7 @@ script:
   - docker tag udacity-frontend "$DOCKER_USERNAME"/udacity-frontend:latest
   
   # Service reverseproxy
-  - docker build -t reverseproxy .
+  - docker build -t reverseproxy ./udacity-deployment
   - docker tag reverseproxy "$DOCKER_USERNAME"/reverseproxy:latest
 
 after_success:
