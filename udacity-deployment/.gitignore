@@ -1,6 +1,2 @@
 /k8s/env-secret.yaml
-<<<<<<< HEAD
 /k8s/env-config.yaml
-=======
-/k8s/env-configmap.yaml
->>>>>>> dev2
